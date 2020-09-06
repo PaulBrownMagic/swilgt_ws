@@ -13,7 +13,8 @@
 			asserta(websockets_(New)))).
     :- private(update_to_/2).
 	update_to_(Group, New) :-
-	    with_mutex(group, (
+	    ground(Group),
+	    with_mutex(Group, (
 			retractall(websockets_(Group, _)),
 			asserta(websockets_(Group, New)))).
 
@@ -24,7 +25,8 @@
     :- public(remember/2).
 	remember(Group, WS) :-
 	    once((websockets_(Group, WSs) ; WSs = [])),
-		update_to_(Group, [WS|WSs]).
+		update_to_(Group, [WS|WSs]),
+		remember(WS).
 
     :- public(forget/1).
 	forget(WS) :-
