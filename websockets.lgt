@@ -37,15 +37,21 @@
     forget(Group, WS) :-
         websockets_(Group, Orig),
         list::delete(Orig, WS, Remaining),
-        update_to_(Group, Remaining).
+        update_to_(Group, Remaining),
+		forget(WS).
 
     :- public(broadcast/1).
     broadcast(Msg) :-
         websockets_(WSs),
-        forall(list::member(WS, WSs), ws::send(WS, Msg)).
+        forall(list::member(WS, WSs), send_or_forget(WS, Msg)).
     :- public(broadcast/2).
     broadcast(Group, Msg) :-
         websockets_(Group, WSs),
-        forall(list::member(WS, WSs), ws::send(WS, Msg)).
+        forall(list::member(WS, WSs), send_or_forget(Group, WS, Msg)).
+
+    send_or_forget(WS, Msg) :-
+	    catch(ws::send(WS, Msg), _, ::forget(WS)).
+    send_or_forget(Group, WS, Msg) :-
+	    catch(ws::send(WS, Msg), _, ::forget(Group, WS)).
 
 :- end_object.
