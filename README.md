@@ -12,7 +12,7 @@ ws_send(Websocket, text("Hello, world!")).
 
 We write:
 
-``` prolog
+``` logtalk
 ws::send(Websocket, text("Hello, world!")).
 ```
 
@@ -22,7 +22,7 @@ The remaining two predicates are prefixed with `http_`, which we also replace wi
 
 This is akin to the `handler.lgt` category provided in `swilgt_http`. It allows you to define a handler for a websocket URL like so:
 
-``` prolog
+``` logtalk
 :- object(echo,
     imports(ws_handler)).
     
@@ -45,7 +45,7 @@ Don't forget the websocket URL for testing that will be `ws://localhost:<PORT>/e
 
 This handler allows you to do complex things with your websocket, such as make use of `websockets.lgt` discussed next. But for such simple use cases `ws_handler` also provides a default loop handler that takes care of much of that boilerplate. This code will do the exact same thing:
 
-``` prolog
+``` logtalk
 :- object(echo,
     imports(ws_handler)).
     
@@ -66,7 +66,7 @@ This is an object for managing multiple websockets either in one big group or in
 
 To manage one big group you can tell the object to remember a websocket with `websockets::remember(Websocket)`, the same for forgetting: `websockets::forget(Websocket)`. Broadcasting just requires the message: `websockets::broadcast(text("Hello every websocket connection!"))`. So if we wanted to echo every received message to every connected websocket, our echo example would become:
 
-``` prolog
+``` logtalk
 :- object(echo,
     imports(ws_handler)).
     
@@ -92,7 +92,7 @@ To manage one big group you can tell the object to remember a websocket with `we
 
 To manage groups of websockets the predicates remain the same but with an additional first argument identity, so to use the Prolog IRC room name (##prolog) as an example:
 
-``` prolog
+``` logtalk
 websockets::remember('##prolog', Websocket).
 websockets::broadcast('##prolog', text("Help?")).
 websockets::forget('##prolog', Websocket).
