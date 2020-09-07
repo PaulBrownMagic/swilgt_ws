@@ -3,7 +3,7 @@
 )).
 
     :- initialization((
-        logtalk_load([ types(list)
+        logtalk_load([ basic_types(loader)
                      , swilgt_http(loader)
                      ]),
         use_module(library(http/websocket)),
